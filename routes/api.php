@@ -24,6 +24,7 @@ Route::group(['prefix' => '/materi'], function(){
     Route::get('/kelas', [RangkumanController::class, 'getKelas']);
     Route::get('/mapel', [RangkumanController::class, 'getMapel']);
     Route::get('/rangkuman/{mapel_id}', [RangkumanController::class, 'getRangkuman']);
+    Route::get('/detail/rangkuman/{rangkuman}', [RangkumanController::class, 'detail']);
 });
 
 
