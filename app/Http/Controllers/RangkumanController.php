@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RangkumanRequest;
-use App\Http\Resources\RangkumanCollection;
+use App\Http\Resources\DetailRangkumanCollection;
+use App\Http\Resources\RangkumanListCollection;
 use App\Models\Kelas;
 use App\Models\Rangkuman;
 use Throwable;
@@ -40,14 +41,20 @@ class RangkumanController extends Controller
 
         return response()->json([
             'message' => 'List data rangkuman',
-            'data' => RangkumanCollection::collection($data)->response()->getData(true)
+            'data' => RangkumanListCollection::collection($data)->response()->getData(true)
         ], 200);
+    }
+
+    public function detail(Rangkuman $rangkuman){
+        return new DetailRangkumanCollection($rangkuman->append('getAuthor'));
     }
 
     public function createRangkuman(RangkumanRequest $rangkumanRequest)
     {
         try {
             $data = $rangkumanRequest->validated();
+            $data['rangkuman_pdf'] = $rangkumanRequest->file('rangkuman_pdf')->store(Rangkuman::FILE_PATH);
+
             Rangkuman::create($data);
 
             return response()->json(

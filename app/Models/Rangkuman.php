@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Rangkuman extends Model
 {
     use HasFactory;
+
+    const FILE_PATH = 'rangkuman';
 
     protected $table = 'rangkuman_materi';
     protected $guarded = ['id'];
