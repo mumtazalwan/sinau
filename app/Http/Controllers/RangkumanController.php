@@ -7,13 +7,14 @@ use App\Http\Resources\DetailRangkumanCollection;
 use App\Http\Resources\RangkumanListCollection;
 use App\Models\Kelas;
 use App\Models\Rangkuman;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\JsonResponse;
 use Throwable;
-use function App\Http\Resources\RangkumanCollection;
 
 class RangkumanController extends Controller
 {
 
-    public function getKelas()
+    public function get_class(): JsonResponse
     {
         $data = Kelas::all();
 
@@ -23,7 +24,7 @@ class RangkumanController extends Controller
         ]);
     }
 
-    public function getMapel()
+    public function get_subject(): JsonResponse
     {
         $data = Kelas::with('getMapel')->whereHas('getMapel')->get();
 
@@ -33,7 +34,7 @@ class RangkumanController extends Controller
         ]);
     }
 
-    public function getRangkuman($mapel_id)
+    public function get_summary($mapel_id): JsonResponse
     {
         $data = Rangkuman::where('mapel_id', $mapel_id)
             ->with('getAuthor', 'getClass', 'getSubject')
@@ -45,15 +46,16 @@ class RangkumanController extends Controller
         ], 200);
     }
 
-    public function detail(Rangkuman $rangkuman){
+    public function detail(Rangkuman $rangkuman): DetailRangkumanCollection
+    {
         return new DetailRangkumanCollection($rangkuman->append('getAuthor'));
     }
 
-    public function createRangkuman(RangkumanRequest $rangkumanRequest)
+    public function upload_summary(RangkumanRequest $rangkumanRequest): JsonResponse
     {
         try {
             $data = $rangkumanRequest->validated();
-            $data['rangkuman_pdf'] = $rangkumanRequest->file('rangkuman_pdf')->store(Rangkuman::FILE_PATH);
+            $data['rangkuman_pdf'] = $rangkumanRequest->file('rangkuman_pdf')->store();
 
             Rangkuman::create($data);
 
