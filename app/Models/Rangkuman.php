@@ -10,7 +10,7 @@ class Rangkuman extends Model
 {
     use HasFactory;
 
-    const FILE_PATH = 'rangkuman';
+    const FILE_PATH = 'public';
 
     protected $table = 'rangkuman_materi';
     protected $guarded = ['id'];
